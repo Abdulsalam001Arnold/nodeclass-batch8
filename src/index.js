@@ -15,13 +15,10 @@ app.use(cors({
     methods: ["GET", "POST", "DELETE"]
 }))
 
-app.use(cookieParser())
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api", userRoutes)
 
-app.get("/", (req, res) => {
-    res.send("Hello, welcome!")
-})
 
 
 const start = async () => {
@@ -40,6 +37,10 @@ const start = async () => {
 }
 
 start()
+
+app.get("/", (req, res) => {
+    res.send("Hello, welcome!")
+})
 
 if(process.env.NODE_ENV !== "production") {
     app.listen(3000, () => {
