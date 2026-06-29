@@ -110,4 +110,35 @@ export const login = async (req, res) => {
    }
 }
 
+export const logOut = async (req, res) => {
+    try {
+        res.clearCookie("token")
 
+        return res.status(200).json({
+            message: "Logout successful!"
+        })
+    } catch (err) {
+        if(err instanceof Error) {
+            return res.status(500).json({
+                message: err.message
+            })
+        }
+    }
+}
+
+export const getProfile = async (req, res) => {
+    try{
+    const user = req.user
+
+    return res.status(200).json({
+        data: user,
+        message: "Profile fetched successfully!"
+    })
+    }catch(err){
+        if(err instanceof Error) {
+            return res.status(500).json({
+                message: err.message
+            })
+        }
+    }
+}
