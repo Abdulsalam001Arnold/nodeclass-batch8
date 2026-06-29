@@ -8,11 +8,6 @@ import cors from "cors"
 dotenv.config()
 const app = express()
 
-connectDB(process.env.MONGODB_URI_7).then(() => {
-    console.log("Database connected successfully")
-}).catch((error) => {
-    console.log(error)
-})
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -27,6 +22,24 @@ app.use("/api", userRoutes)
 app.get("/", (req, res) => {
     res.send("Hello, welcome!")
 })
+
+
+const start = async () => {
+    const uri = process.env.MONGODB_URI_7
+    if (!uri || uri.includes("<db_password>")) {
+        console.error("MONGODB_URI is missing or still contains <db_password> placeholder. Update .env and retry.")
+        process.exit(1)
+    }
+    try {
+        await connectDB(uri)
+        console.log("MongoDB connected")
+    } catch (err) {
+        console.error("MongoDB connection failed:", err.message)
+        process.exit(1)
+    }
+}
+
+start()
 
 if(process.env.NODE_ENV !== "production") {
     app.listen(3000, () => {
